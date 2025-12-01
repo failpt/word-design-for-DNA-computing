@@ -1,1 +1,4 @@
-#FF1493: #Word Design for DNA Computing on Surfaces
+# Word Design for DNA Computing on Surfaces
+This is an experimental project attempting to solve [problem 033](https://www.csplib.org/Problems/prob033/) on [CSPLib](https://www.csplib.org/).
+
+Given a fixed size `n`, I try to find a set of `n` strings matching the properties described in the problem. I do this with `DNASatEncoder` in `src/dna_encoder.py`, which  reduces the problem of finding a set of a given size to SAT. In pursuit of experimentation, I use three different SAT solvers – [Glucose](https://github.com/audemard/glucose), [Kissat](https://github.com/arminbiere/kissat), and [CaDiCaL](https://github.com/arminbiere/cadical) ([paper](https://cca.informatik.uni-freiburg.de/papers/BiereFallerFazekasFleuryFroleyksPollitt-CAV24.pdf)) –  and compare their performance on fixed input sizes.
