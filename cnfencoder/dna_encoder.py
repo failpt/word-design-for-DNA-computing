@@ -1,9 +1,9 @@
 import itertools
 
 class DNAEncoder: 
-    """Encodes a set of strings {A, C, D, T} as {10, 00, 01, 11} 
-    and constructs a CNF formula which enforces problem 033 specific constraints on the set."""
     def __init__(self, num_words):
+        """ Encode a set of strings {A, C, D, T} as {10, 00, 01, 11} and construct a 
+        CNF formula which enforces problem 033 specific constraints on the set. """
         self.num_words = num_words
         self.length = 8 # word length
         self.bpl = 2 # bits per letter
@@ -18,8 +18,8 @@ class DNAEncoder:
         self._encode()
         
     def to_dimacs(self):
-        """:returns: A set of clauses corresponding to the current ``DNAEncoder`` instance in DIMACS.
-        :rtype: str"""
+        """ :returns: A set of clauses corresponding to the current ``DNAEncoder`` instance in DIMACS.
+        :rtype: str """
         lines = [f"p cnf {self.total_vars} {len(self.clauses)}"]
         for c in self.clauses:
             lines.append(" ".join(map(str, c)) + " 0")
@@ -30,7 +30,7 @@ class DNAEncoder:
         :param model: A model solving the earlier constructed CFN formula 
         :type model: list of int
         :returns: Decoded model
-        :rtype: list of str"""
+        :rtype: list of str """
         words = []
         head_var = 1
         for w in range(self.num_words):
@@ -48,23 +48,24 @@ class DNAEncoder:
         :param solver_output: Output of a SAT solver 
         :type solver_output: str
         :returns: Decoded model
-        :rtype: list of str"""
+        :rtype: list of str """
         model = [int(x)
              for line in solver_output.splitlines() if line.startswith('v') 
              for x in line.split()[1:] if x != '0']
         return self.decode_model(model) if model else None
 
     def _get_var(self, w, p=0, b=0):
-        """ Returns variable ID for word ``w`` at position ``p`` at bit ``b``. """
+        """ :returns: variable ID for word ``w`` at position ``p`` at bit ``b``.
+        :rtype: int """
         return 1 + (w * self.length * self.bpl) + (p * self.bpl) + b
 
     def _allocate_var(self):
-        """ Allocates a new auxiliary variable. """
+        """ Allocate a new auxiliary variable. """
         self.total_vars += 1
         return self.total_vars
 
     def _add_gc_content_constraint(self, w):
-        """ Add clauses corresponding to word ``w`` having exaclty 4 letters from {C, G}"""
+        """ Add clauses corresponding to word ``w`` having exaclty 4 letters from {C, G} """
         head_var = self._get_var(w)
         bit0_vars = [head_var + self.bpl * i for i in range(self.length)]
             
@@ -74,7 +75,7 @@ class DNAEncoder:
             
     def _add_hamming_constraint(self, w1, w2, is_rc):
         """ Add clauses corresponding to words ``w1`` and ``w2`` having hamming distance of at least 4. 
-        ``is_rc`` indicates wether we treat this as an 'RC-constraint' (i.e. third constraint of problem 033) or a normal constraint (i.e. second constraint) between two distinct words."""
+        ``is_rc`` indicates wether we treat this as an 'RC-constraint' (i.e. third constraint of problem 033) or a normal constraint (i.e. second constraint) between two distinct words. """
         match_vars = []
         
         for p in range(self.length):
@@ -100,7 +101,7 @@ class DNAEncoder:
             self.clauses.append([-x for x in combo])
             
     def _add_order(self, w1, w2):
-        """ Add clauses corresponding to order ``w1`` < ``w2`` by MSB."""
+        """ Add clauses corresponding to order ``w1`` < ``w2`` by MSB. """
         head_u, head_v = self._get_var(w1), self._get_var(w2)
         prev_eq = None 
         
@@ -134,7 +135,7 @@ class DNAEncoder:
         self.clauses.append([-prev_eq])     # w1 != w2
 
     def _encode(self):
-        """ Enforces all the constraints on the words, saves the clauses for CNF in a list."""
+        """ Enforce all the constraints on the words and save the clauses for CNF in a list. """
         for w in range(self.num_words):
             self._add_gc_content_constraint(w)    
                      
