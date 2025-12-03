@@ -45,7 +45,7 @@ def run_race(sizes, solver_names, json_out, plot_out):
     with open(json_out) as f:
         data = json.load(f)["results"]
 
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(7, 9))
     
     results = {name: [] for name in solver_names}
     
@@ -62,11 +62,11 @@ def run_race(sizes, solver_names, json_out, plot_out):
         plt.plot(
             [p[0] for p in pts], 
             [p[1] for p in pts], 
-            label=name, color=COLORS[name], marker="s"
+            label=name, color=COLORS[name], marker="o"
         )
         
-    plt.xlabel("set size (n)", fontsize=12)
-    plt.ylabel("runtime (s)", fontsize=12)
+    plt.xlabel("Set Size (n)", fontsize=15)
+    plt.ylabel("Runtime (s)", fontsize=15)
     
     plt.legend()
     plt.grid(True)
