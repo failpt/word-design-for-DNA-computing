@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+
 import subprocess
 import json
 import matplotlib.pyplot as plt
 from cnfencoder import DNAEncoder
 
-BIN_PATH = "./bin/"
+BIN_PATH = "bin/"
 CURRENT_DIR = "race/"
 CNF_PATH_TEMPLATE = CURRENT_DIR + "cnfs/temp_{}.cnf"
 
