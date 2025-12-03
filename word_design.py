@@ -1,17 +1,20 @@
+#!/usr/bin/env python3
+
 import subprocess
 from argparse import ArgumentParser
 from cnfencoder import DNAEncoder
 import time
 
-BIN_PATH = "./bin/" # path to the compiled SAT solver binaries
+BIN_PATH = "bin/" # path to the compiled SAT solver binaries
 
 DEFAULT_BINARY = "glucose-syrup"
-DEFAULT_SET_LEN = 25
 DEFAULT_CNF_OUT_FILE = "formula.cnf"
 
 RUNTIME_LINE_COLOR = "\033[95m"
 RESET_COLOR = "\033[0m"
+
 BIN_PATH_LEN = len(BIN_PATH) + len(DEFAULT_BINARY)
+DEFAULT_SET_LEN = 25
 
 NO_ERROR_SOLVER_CODES = [10, 20]
 
@@ -58,7 +61,7 @@ if __name__ == "__main__":
         "--number", 
         default=DEFAULT_SET_LEN, 
         type=int, 
-        help="Desired set size."
+        help="desired set size"
     )
     
     parser.add_argument(
@@ -66,7 +69,7 @@ if __name__ == "__main__":
         "--output", 
         default=DEFAULT_CNF_OUT_FILE, 
         type=str, 
-        help="Output CNF file."
+        help="output DIMACS file for the CNF formula"
     )
     
     parser.add_argument(
@@ -74,14 +77,14 @@ if __name__ == "__main__":
         "--solver", 
         default=BIN_PATH + DEFAULT_BINARY, 
         type=str, 
-        help="The SAT solver binary name."
+        help="the SAT solver binary name"
     )
     
     parser.add_argument(
         "-q", 
         "--quiet", 
         action="store_true", 
-        help="Suppress solver output."
+        help="suppress solver output"
     )
     
     args = parser.parse_args()
