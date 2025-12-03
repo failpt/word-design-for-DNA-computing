@@ -87,7 +87,13 @@ The mean runtimes are as follows:
   <img src="race/plots/plot_no_glucose.png" width="49.7%">
 </p>
 
-Experiments were run on Apple M3 Pro CPU (arm64) with 18 GB of unified memory on macOS 15.4.1 (Sequoia). You may find the `.cnf` for each size in `race/cnfs/` and the hyperfine reports in `race/logs/`.
+Experiments were run on Apple M3 Pro CPU (arm64) with 18 GB of unified memory on macOS 15.4.1 (Sequoia). You may find the `.cnf` for each size in `race/cnfs/` and the hyperfine reports in `race/logs/`. 
+
+If you wish to play with the plotting, you may edit `race/race.py` and run 
+```
+% PYTHONPATH=. race/race.py
+```
+from the root repository (don't forget to make `race.py` executable with `chmod +x`)
 
 ## Results
 The two biggest sets I found so far are of size **84**. You may find the formula for this size in `formula.cnf`.
