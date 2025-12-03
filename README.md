@@ -77,20 +77,27 @@ Options:
    ```
 You may view the `.cnf` files for each of the examples inside `examples/`.
 
-## Results
+## Experiments
 To compare the performance of the three SAT solvers, I ran a race with the help of [hyperfine](https://github.com/sharkdp/hyperfine) and plotted the results.
-I fed the set sizes 
-```math 
-\{ 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 66, 67, 68, 69, 70, 71 \}
-```
-to all three solvers and 
-```math
-72, 74, 75, 76, 78, 80, 81, 82, 83
-```
-only too Kissat and CaDiCaL, deeming Glucose too slow to go continue. 
+I fed the set sizes {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 66, 67, 68, 69, 70, 71} to all three solvers and {72, 74, 75, 76, 78, 80, 81, 82, 83} only to Kissat and CaDiCaL, deeming Glucose too slow to continue. Hyperfine ran each batch 4 times and deviation from the mean was always under 0.4 seconds.
 
-The results are as follows:
+The mean runtimes are as follows:
 <p align="center">
   <img src="race/plots/plot_all.png" width="49.7%">
   <img src="race/plots/plot_no_glucose.png" width="49.7%">
 </p>
+
+Experiments were run on Apple M3 Pro CPU (arm64) with 18 GB of unified memory on macOS 15.4.1 (Sequoia). You may find the `.cnf` for each size in `race/cnfs/` and the hyperfine reports in `race/logs/`.
+
+## Results
+The two biggest sets I found so far are of size **84**. 
+
+One was found by Kissat in 107.3449 seconds:
+```
+GACCATTG | GAATCCTG | CTCCAATC | GGTTTTCG | GAAGTCCT | GTCTGTTC | CCTTTCCT | CAAATCGG | GCAACTCT | CGCTTAAG | CCAGACTT | GGAATGAG | GACTAACC | GGGTCAAT | GCGTAAGA | CAGTTAGC | CACTCTCT | CCAACAAG | CGTAGATG | GATAGTCC | GATACAGG | GTATGACG | TGAGCCAT | TATGCCTC | TACCTTGC | TTCGAGAC | TGTCCGAA | TGACATGG | TCACGACT | ACGTGTAC | ACTCCTTG | ACGGTAAG | AATCCGCT | AAAACCCC | AACGGTAG | AGGCTACT | TACTGAGG | TTATCGGG | TCGTAGAG | TGAGTACG | TTCGCTTG | AACTGCCA | ATGAGGAG | TCAATGGC | TGTGGAAC | AGCTACAC | ATGCTCTG | TGCTGGAT | AGAACGGT | ACGCACAT | TCAGAGCA | ACTCTGAC | AAGCCAAC | TTTTGGCC | TTGGTGGA | TTGACAGC | AGTTCAGC | ACAGCAGA | TAAAGGCG | TGGTGTTG | ACCATCTC | AACACGTG | TCAGGTTC | ATCTTGGC | TGTCTCGT | TATGAGGG | TGCGACTA | TTCTTCCG | ACATTGCG | ACAGGGAT | TCCCTATG | TTGCAACG | TACCGCTT | TGGATCAC | TCGCTTCA | AGTGTGCA | ACAAGTGG | ACACATCC | TCTTCACG | ACGTCGTT | AGACCCTA | AGACGAAG | TCCAATCG | TTACGCAC
+```
+
+And another one by CaDiCaL in 901.8953 seconds:
+```
+CGAACACA | CTCACTAC | GTTATGGC | CAAAGCAC | CGATTTGC | GTGACAAG | CTCATAGG | GAATGTCC | GTCTCATC | CATCATCG | CCAGAATC | CTGTTACC | CTTCAAGC | CGAGATAG | CTACAGTG | GAAGAAGG | CTCCTTCA | CCTAGACT | GCCCATAA | TCGACATC | ACCTATGG | ATAGGACC | TCGGATCA | ACTCTGCA | TAGATCGC | TGTGACTC | TTAACCCC | AACGCAGT | AGCGAAAC | ATCTCGGA | TCATCGTG | TCACTACG | ATGCCACT | TTGGGTAG | TAGGCGAA | TCCAACGA | TGGTGAAC | TGGAATGG | TTTCCGTC | TGCCCAAA | AAGGTGTC | ATCCACTC | TACATGCG | TATCCCCT | TCTCCTGA | ACTTGCGA | ACACAGAC | AGTTCCTG | ATGGATGC | AACCTACC | AAAACCGG | ACGTGTCT | AGGATTCC | TAGCACAG | TAACCAGC | TGCTGTCA | ACTACCAC | TTCTACCG | ACGAAGTG | AATCCGAG | TTTGCAGG | AATAGGCC | TCCCTTTC | ACCGTATG | ACTCGATC | AAGCGTAC | TGGCGTTT | TAAGGCTG | TGACTCAC | TCAGCTAC | ACCACTCA | ACCCTCAT | AAGTGAGG | TACTCCAC | TCTTAGCC | ATCCGAAG | AAGTACCC | TCGAGCAT | TATGGTGC | ACAAGTGC | TCCTCACT | AGAACGTC | AGCAGTTG | AGCTTGAG
+```
