@@ -76,3 +76,21 @@ Options:
    GTTAGTGC | CGAAACGA | CCTTACCA | CATACGAG | CAGTAGAC | GAATCCGA | CGCAATTG | CGTCATGT | GAAGGTGT | GACATAGG | CAAGCCTT | GGACTTCA | GGTCACAA | GGGACTAT | GTGTGCAA | CAGGATCT | GGAAAGAG | GTACGCTT | GAAAGCAC | CCTTCTTG | CTCACCAA | CACACTGT | GTGAAACG | CCACAGTA | GGGATGTA | CGGGTTAA | CGATCACA | GATCCGTT | CCCAAAAC | GAACCTAG | GACTCTTC | CATCTGGA | GTAGGACA | GCAATGCT | CATTGAGC | GATTGGCA | GATGTCAG | GATCATCC | GGCTTTAG | GAGTCACT | CTATGGGA | CCGTGATA | GCCGTTTA | CAACGACT | CCTAGTCT | CTTAGCTG | GTATCGAC | CTGATTGG | AGCGAAAG | AGTAGCCA | ATTGCGGA | AACCTTCG | TGGGCATA | TCTGGTGA | TGTGGGAT | ATCCGTGT | TGAGTGGA | ACGGACAT | AAGGTGGT | AGCCTGTT | TCATGCGT | ACTCTCCT | TAACGGTG | TTTCTGCC | TCGTCGTT | ACGACAAG | TTCCTCGA | AAGTACCG | TTCGAGCT | TCCTTAGC | ACGTTCTC
    ```
 You may view the `.cnf` files for each of the examples inside `examples/`.
+
+## Results
+To compare the performance of the three SAT solvers, I ran a race with the help of [hyperfine](https://github.com/sharkdp/hyperfine) and plotted the results.
+I fed the set sizes 
+```math 
+\{ 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 66, 67, 68, 69, 70, 71 \}
+```
+to all three solvers and 
+```math
+72, 74, 75, 76, 78, 80, 81, 82, 83
+```
+only too Kissat and CaDiCaL, deeming Glucose too slow to go continue. 
+
+The results are as follows:
+<p align="center">
+  <img src="race/plots/plot_all.png" width="49.7%">
+  <img src="race/plots/plot_no_glucose.png" width="49.7%">
+</p>
