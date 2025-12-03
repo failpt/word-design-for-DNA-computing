@@ -32,7 +32,7 @@ Options:
    ```
 ---
 2. ```
-   ./word_design.py -n 54 -o examples/example2.cnf -s bin/kissat -q
+   % ./word_design.py -n 54 -o examples/example2.cnf -s bin/kissat -q
    ```
    Output:
    ```
@@ -41,7 +41,7 @@ Options:
    ```
 ---
 3. ```
-   ./word_design.py -n 69 -o examples/example3.cnf -s bin/glucose-syrup -q 
+   % ./word_design.py -n 69 -o examples/example3.cnf -s bin/glucose-syrup -q 
    ```
    Output:
    ```
@@ -50,7 +50,7 @@ Options:
    ```
 ---
 4. ```
-   ./word_design.py -n 69 -o examples/example4.cnf -s bin/cadical -q
+   % ./word_design.py -n 69 -o examples/example4.cnf -s bin/cadical -q
    ```
    Output:
    ```
@@ -59,7 +59,7 @@ Options:
    ```
 ---
 5. ```
-   ./word_design.py -n 83 -o examples/example5.cnf -s bin/cadical -q
+   % ./word_design.py -n 83 -o examples/example5.cnf -s bin/cadical -q
    ```
    Output:
    ```
@@ -68,7 +68,7 @@ Options:
    ```
 ---
 6. ```
-   ./word_design.py -n 71 -o examples/example6.cnf -q
+   % ./word_design.py -n 71 -o examples/example6.cnf -q
    ```
    Output:
    ```
