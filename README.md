@@ -10,3 +10,24 @@ word_design.py [-h] [-n NUMBER] [-o OUTPUT] [-s SOLVER] [-q]
 ```
 
 Options:
+```
+  -h, --help            show this help message and exit
+  -n NUMBER, --number NUMBER
+                        desired set size                       (default: 25)
+  -o OUTPUT, --output OUTPUT
+                        output DIMACS file for the CNF formula (default: formula.cnf)
+  -s SOLVER, --solver SOLVER
+                        the SAT solver binary name             (default: ./bin/glucose-syrup)
+  -q, --quiet           suppress solver output
+```
+
+## Examples
+1. ```
+   % ./word_design.py -q
+   ```
+   Output:
+   ```diff
+   + [./bin/glucose-syrup] Runtime: 0.0337 seconds
+   CCTCAAAG | CGGTTTCT | GTCTTTGC | CACAAGCA | CAGCCATT | GCGGATAA | CTCCATCT | CGAGTATC | CCCAAAGT | CAGCTTAG | GACATCGT | GGCAACAA | GTAGACTC | GGTGTTTG | GAGGGAAT | GCACGATT | GCGACTTT | GTCTGCTT | GTTTCGGA | GCCATTCA | GTACGCAA | CTATAGCG | GTAAGGGT | GATCTAGG | TTGGATCG
+   ```
+2. 
