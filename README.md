@@ -90,7 +90,7 @@ The mean runtimes are as follows:
 Experiments were run on Apple M3 Pro CPU (arm64) with 18 GB of unified memory on macOS 15.4.1 (Sequoia). You may find the `.cnf` for each size in `race/cnfs/` and the hyperfine reports in `race/logs/`.
 
 ## Results
-The two biggest sets I found so far are of size **84**. 
+The two biggest sets I found so far are of size **84**. You may find the formula for this size in `formula.cnf`.
 
 One was found by Kissat in 107.3449 seconds:
 ```
