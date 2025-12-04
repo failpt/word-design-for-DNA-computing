@@ -1,12 +1,66 @@
 # Word Design for DNA Computing on Surfaces
 This is an experimental project attempting to solve [problem 033](https://www.csplib.org/Problems/prob033/) on [CSPLib](https://www.csplib.org/).
 
-Given a fixed size `n`, I try to find a set of `n` strings satisfying the problem constraints. I introduce a `cnfencoder` package containing `DNAEncoder`, which  reduces the problem of finding a set of a given size to SAT (helps construct a CNF formula to feed the solver and decode the solution). In pursuit of experimentation, I use three different SAT solvers – [Glucose](https://github.com/audemard/glucose), [Kissat](https://github.com/arminbiere/kissat), and [CaDiCaL](https://github.com/arminbiere/cadical) ([paper](https://cca.informatik.uni-freiburg.de/papers/BiereFallerFazekasFleuryFroleyksPollitt-CAV24.pdf)) –  and compare their performance on fixed input sizes.
+Given a fixed size $n$, I try to find a set of $n$ strings satisfying the problem constraints. I introduce a `cnfencoder` package containing `DNAEncoder`, which  reduces the problem of finding a set of a given size to SAT (helps construct a CNF formula to feed the solver and decode the solution). In pursuit of experimentation, I use three different SAT solvers – [Glucose](https://github.com/audemard/glucose), [Kissat](https://github.com/arminbiere/kissat), and [CaDiCaL](https://github.com/arminbiere/cadical) ([paper](https://cca.informatik.uni-freiburg.de/papers/BiereFallerFazekasFleuryFroleyksPollitt-CAV24.pdf)) –  and compare their performance on fixed input sizes.
+
+## Encoding
+*Notation:* $[n]$ denotes the set { $0, ..., n-1$ }, $w^b$ is $w$ if $b=0$ and $\neg w$ otherwise
+
+We encode a word with two bits per letter: `A=10, C=00, G=01, T=11`; this bijection is particularly convenient because it breaks the set into {A, T} and {C, G} by the first bit, and we only need to flip one bit to get a complement letter.
+
+We encode a set of size $n$ with two/four sets of variables, depending on the value of `eliminate_permutations` the user passes to `DNAEncoder`: $Var(w, p, b)$ representing the $b$-th bit of the $p$-th position of word $w$ indexed from 0, $Match(w_1, w_2, p)$ representing wether words $w_1$ and $w_2$ have the same letter in position $p$ and, if `eliminate_permutations=True`, $PrevEq(w_1, w_2, p, b)$ representing wether words $w_1$ and $w_2$ are identical up to excluding $b$-th bit at $p$-th position and $CurrEq(w_1, w_2, p, b)$ representing the same thing including the current bit. We need $PrevEq,CurrEq$ to order every pair of words (by MSB), effectively eliminating permuations. 
+
+`eliminate_permutations` was made in an optimization attempt by reducing the search space, but in practice it ended up slowing down certain solvers, because they had to seed out sets that were technically correct until they were to find an ordered one. That is why I added the `--order` option instead of hardwiring it into the encoder.
+
+We represent the problem constraints as a conjunction of clauses:
+- **No 5 letters of any word belong to {A, T} or {C, G}**
+  
+  For every $C\subset [8]$ s.t. $|C|=5$:
+  
+  $\bigwedge_{w\in [n]}(\bigvee_{p\in C}Var(w, p, 0))\wedge (\bigvee_{p\in C}\neg Var(w, p, 0))$
+
+- **Hamming distance**
+
+  $\forall w_i, w_j: i,j \in [n]$ and $i<j$ (to eliminate redundant clauses), position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
+  
+  $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1} \vee Var(w_j, p, 0)^{b_0} \vee Var(w_j, p, 1)^{b_1} \vee Match(w_i, w_j, p)$
+  
+  I.e., if the $w_i,w_j$ have the same letter at position $p$, the Match variable must be True.
+  
+  Then, for every $C\subset [8]$ s.t. $|C|=5$:
+  
+  $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
+
+- **Reverse complement distance**
+  
+  $\forall w_i, w_j: i,j \in [n]$ and $i\leq j$, position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
+  
+  $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1 \oplus 1} \vee Var(w_j, 7-p, 0)^{b_0} \vee Var(w_j, 7-p, 1)^{b_1} \vee Match(w_i, w_j, p)$
+
+  We compare $w_i$ at $p$ to $w_j$ at $7-p$ because of the reverse. The second bit of $w_i$ is flipped to get the complement.
+
+  Then, for every $C\subset [8]$ s.t. $|C|=5$:
+
+  $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
+
+- **Ordering Constraint** if `eliminate_permutations=True`
+  
+  $\forall w_i, w_{i+1}: i\in[n-1]$, position $p \in [8]$, and bit $b \in \{0, 1\}$:
+  
+  $(\neg CurrEq(w_i, w_{i+1}, p, b)\vee PrevEq(w_i, w_{i+1}, p, b)) \wedge (\neg CurrEq(w_i, w_{i+1}, p, b)\vee\neg Var(w_i, p, b)\vee Var(w_{i+1}, p, b)) \wedge (\neg CurrEq(w_i, w_{i+1}, p, b)\vee Var(w_i, p, b) \vee \neg Var(w_{i+1}, p, b))$
+  
+  I.e., $CurrEq(w_i, w_{i+1}, p, b)\Rightarrow PrevEq(w_i, w_{i+1}, p, b)$ is true AND the current bits are identical.
+  
+  $\neg PrevEq(w_i, w_{i+1}, p, b) \vee \neg Var(w_i, p, b) \vee Var(w_{i+1}, p, b)$
+  
+  I.e., if $PrevEq(w_i, w_{i+1}, p, b)$ is true, we forbid the case where $w_i$ has a 1 and $w_{i+1}$ has a 0 (enforcing $w_i < w_{i+1}$).
+  
+  And since words cannot be identical $\neg CurrEq(w_{n-2}, w_{n-1}, 7, 1)$.
 
 ## Running the code
 Usage:
 ```
-word_design.py [-h] [-n NUMBER] [-o OUTPUT] [-s SOLVER] [-q]
+word_design.py [-h] [-n NUMBER] [-of OUTPUT] [-s SOLVER] [-q] [-ord]
 ```
 
 Options:
@@ -101,7 +155,7 @@ I compared the **mean runtimes** of the solvers with and without the ordering co
   <img src="experiments/plots/cadical.png" width="32.93%">
 </p>
 
-It appears that Kissat performs better with an ordering constraint the bigger the size gets, while CaDiCaL and Glucose are actually getting significantly slower when it is enforced.
+I conclude that for larger sets, Kissat performs better when the ordering constraint *is enforced*, while CaDiCaL and Glucose are actually getting significantly slower, and that the current fastest option for finding them is unordered CaDiCaL.
 
 You may find the `.cnf` for each size in `experiments/cnfs/` and the hyperfine reports in `experiments/logs/`. 
 
@@ -112,9 +166,11 @@ If you wish to play with the plotting, you may edit `experiments.py` and run
 from the root directory (don't forget to make `experiments.py` executable with `chmod +x`)
 
 ## Results
-The four biggest sets I found so far are of size **84**. 
+<details>
+<summary>Archive</summary>
+The four biggest sets I found so far are of size <b>84</b>. 
 
-You may find the corresponding formulas in `order84.cnf` and `norder84.cnf` respectively.
+You may find the corresponding formulas in `results/order84.cnf` and `results/norder84.cnf` respectively.
 
 1. A sequence with ordering found by Kissat in 107.3449 seconds:
    ```
@@ -135,5 +191,10 @@ You may find the corresponding formulas in `order84.cnf` and `norder84.cnf` resp
    ```
    TTTTGGGG | TTTTCCCC | TTACCGGT | CTTACGCT | TTAAGGCC | TTAGGCGA | TTACACCG | TGTACGAC | TTGATCGG | TTCACGTG | GTTAGCCA | TTGCTGCA | TTGGGACT | TTGGATGC | GGGATTGT | TTCGCCAT | ATCTTGGC | TGTAGACG | TTGCGTTG | TTCCAGAC | CTTCTCTC | TACCTCGA | TAGGCAGA | CCAAAAGG | TACAGGGT | AGTGAAGC | TAGGTCTC | CTGACTAG | TAAGTGGG | TATGAGCC | TACGGAAC | TACTCGCA | TAACCACC | TATCCTGG | GACGATAG | TACTGCTG | TAGTGTCC | TCGCACTT | TGCTACGT | GTTACTGC | TGAACCCT | CATTGAGC | AGATCTGC | GTATCTCG | TCTAACGC | TCTGGTGT | TCCTATCG | TGCATTCC | TCGTCATC | GTACTAGG | ATGTCAGG | TGAGGGAT | ATGAGCAC | TGAGCTTG | ATTGGCTG | ATACGGAG | GTAGAGTG | TCTCTGAG | TCCCTACT | CGATGACT | CACCTATG | TGGTAGAG | TCACTTGC | TCCTTCAC | GGTATCAG | AACCCCTT | ATCGAGCT | GGTTTGTC | ACTTCGTG | GCGAATTC | GATCTTCC | ATCGCATC | AACAGTCG | CGTTACTG | ACATGGGT | TATCGCCT | AGAGTCGT | AAAACCGG | AAGCACAG | AGGATGTG | ATTCGACC | AGCAACTC | AATGCACG | AAACAGGC
    ```
+</details>
 
-It appears that the current best option for sets of large sizes is CaDiCaL without ordering.
+The biggest set so far contains **85** words and was found by CaDiCaL in 819.2578 seconds:
+```
+TCCGATCT | GTATTCCG | CCAATGAC | AACTCCTG | GATATCGC | AGACATCG | GCAGCTTA | GATGGGTA | AATCCGGT | TGATCCTC | TCTGAGTG | GGTGAACT | CATACGTG | TGGATCTG | ATGGGCTA | TGGTCTGT | CGAGATGA | CCTGTCTA | CTGTGAGT | ATTGGTCG | GACCATTG | GACTACGT | ATACGGCA | CTTCTCAC | AGAACCCT | CCGTTAAG | ATGCCATG | GCCTTGTA | TCGATGCT | TACAGCCT | CTGTTTCC | ATCGCTGT | GAAGTGGT | GATTGTGG | TGAAGACG | TGTCATGC | TCGTGCTT | GAACCTCT | ATGGTAGC | TAGCTTCG | CCAGTACT | GACCTACA | TTTCGACC | GGAATGCA | CCTCGTTT | TCCTACAC | AGTTGCGT | ACCTGTGA | AACCTGAC | AGCGAGAA | GGGTGTTA | GTCTGTAC | CGGTAACA | CGTTGATG | GTCAACCA | CTCGATTC | TGGCAAAG | AGGAAGGT | TATCGGAG | AAGAGTCC | GGTGTTAC | TCAGGAAC | CAGCCTTA | ACGAGGAA | ATTGCGTC | TTAGTGCC | ATCGTCAG | AATCGCTC | GGCTAATC | ATGTCCAC | GGTTCGTT | CCTTCTAC | GCAAGTGT | GTTCTGCT | TGCTTAGG | TCCACACA | TCTAGCGA | CCTTTGGT | CTAGCCAA | GCGCTTAT | CCCAACTT | TTATGGGG | TGGGCATA | TAGTGGCA | CACAGTAG
+```
+You may find the corresponding formula in `results/norder85.cnf`
