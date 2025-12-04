@@ -95,10 +95,12 @@ I compared the **mean runtimes** of the solvers with and without the ordering co
 </p>
 
 <p align="center">
-  <img src="experiments/plots/glucose.png" width="32.9%">
-  <img src="experiments/plots/kissat.png" width="32.9%">
-  <img src="experiments/plots/cadical.png" width="32.9%">
+  <img src="experiments/plots/glucose.png" width="32.93%">
+  <img src="experiments/plots/kissat.png" width="32.93%">
+  <img src="experiments/plots/cadical.png" width="32.93%">
 </p>
+
+It appears that Kissat performs better with an ordering constraint the bigger the size gets, while CaDiCaL and Glucose are actually getting significantly slower when it is enforced.
 
 You may find the `.cnf` for each size in `experiments/cnfs/` and the hyperfine reports in `experiments/logs/`. 
 
