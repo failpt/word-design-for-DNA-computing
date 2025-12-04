@@ -1,10 +1,11 @@
 import itertools
 
 class DNAEncoder: 
-    def __init__(self, num_words):
+    def __init__(self, num_words, eliminate_permutations=False):
         """ Encode a set of strings {A, C, D, T} as {10, 00, 01, 11} and construct a 
         CNF formula which enforces problem 033 specific constraints on the set. """
         self.num_words = num_words
+        self.eliminate_permutations = eliminate_permutations
         self.length = 8 # word length
         self.bpl = 2 # bits per letter
         
@@ -85,8 +86,8 @@ class DNAEncoder:
             u0, v0 = self._get_var(w1, p), self._get_var(w2, (self.length - 1) - p if is_rc else p)
             u1, v1 = u0 + 1, v0 + 1
             
-            for b0 in [False, True]:
-                for b1 in [False, True]:
+            for b0 in [True, False]:
+                for b1 in [True, False]:
                     # in this encoding we only need to flip the second bit for the complement
                     lits = [
                         -u0 if b0 else u0,
@@ -145,5 +146,6 @@ class DNAEncoder:
                     self._add_hamming_constraint(i, j, is_rc=False)
                 self._add_hamming_constraint(i, j, is_rc=True)
             
-        for i in range(self.num_words - 1): # eliminate permutations
-            self._add_order(i, i + 1)
+        if (self.eliminate_permutations):
+            for i in range(self.num_words - 1):
+                self._add_order(i, i + 1)

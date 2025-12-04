@@ -1,0 +1,990 @@
+{
+  "results": [
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_15.cnf",
+      "mean": 0.01255299084,
+      "stddev": 0.00035817674291751574,
+      "median": 0.01273544884,
+      "user": 0.014869993333333333,
+      "system": 0.00124744,
+      "min": 0.01214032384,
+      "max": 0.01278319984,
+      "times": [
+        0.01273544884,
+        0.01214032384,
+        0.01278319984
+      ],
+      "memory_usage_byte": [
+        14237696,
+        14237696,
+        14237696
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "15"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_15.cnf",
+      "mean": 0.012685365840000002,
+      "stddev": 0.00010437522455065634,
+      "median": 0.01272986584,
+      "user": 0.01657066,
+      "system": 0.0012937733333333332,
+      "min": 0.012566115840000001,
+      "max": 0.01276011584,
+      "times": [
+        0.01272986584,
+        0.01276011584,
+        0.012566115840000001
+      ],
+      "memory_usage_byte": [
+        14237696,
+        14237696,
+        14237696
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "15"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_20.cnf",
+      "mean": 0.021051032506666668,
+      "stddev": 0.00027334461851723473,
+      "median": 0.021104490840000004,
+      "user": 0.027545993333333334,
+      "system": 0.0016931066666666667,
+      "min": 0.020754907840000003,
+      "max": 0.02129369884,
+      "times": [
+        0.02129369884,
+        0.021104490840000004,
+        0.020754907840000003
+      ],
+      "memory_usage_byte": [
+        22839296,
+        22839296,
+        22839296
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "20"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_20.cnf",
+      "mean": 0.020880602173333335,
+      "stddev": 0.0001048490691915434,
+      "median": 0.02093319984,
+      "user": 0.028791993333333335,
+      "system": 0.0016417733333333332,
+      "min": 0.020759865840000002,
+      "max": 0.02094874084,
+      "times": [
+        0.02093319984,
+        0.02094874084,
+        0.020759865840000002
+      ],
+      "memory_usage_byte": [
+        22839296,
+        22839296,
+        22839296
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "20"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_25.cnf",
+      "mean": 0.03437051884,
+      "stddev": 0.0012858460287736649,
+      "median": 0.03390561584,
+      "user": 0.051047993333333326,
+      "system": 0.00258044,
+      "min": 0.03338178284,
+      "max": 0.03582415784,
+      "times": [
+        0.03338178284,
+        0.03390561584,
+        0.03582415784
+      ],
+      "memory_usage_byte": [
+        31277056,
+        31277056,
+        35274752
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "25"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_25.cnf",
+      "mean": 0.03406314350666667,
+      "stddev": 0.0005435165129141257,
+      "median": 0.03424740784,
+      "user": 0.05032332666666667,
+      "system": 0.00273844,
+      "min": 0.03345144884,
+      "max": 0.03449057384,
+      "times": [
+        0.03424740784,
+        0.03449057384,
+        0.03345144884
+      ],
+      "memory_usage_byte": [
+        35274752,
+        35274752,
+        35274752
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "25"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_30.cnf",
+      "mean": 0.04690347717333334,
+      "stddev": 0.00044322391510537187,
+      "median": 0.04694115784,
+      "user": 0.07094066,
+      "system": 0.002901773333333333,
+      "min": 0.04644261584,
+      "max": 0.04732665784,
+      "times": [
+        0.04732665784,
+        0.04694115784,
+        0.04644261584
+      ],
+      "memory_usage_byte": [
+        39043072,
+        39043072,
+        39043072
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "30"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_30.cnf",
+      "mean": 0.047875546506666665,
+      "stddev": 0.00030538023273672286,
+      "median": 0.04786611584,
+      "user": 0.07736699333333334,
+      "system": 0.0029841066666666666,
+      "min": 0.04757499084,
+      "max": 0.04818553284,
+      "times": [
+        0.04786611584,
+        0.04818553284,
+        0.04757499084
+      ],
+      "memory_usage_byte": [
+        39043072,
+        39043072,
+        39043072
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "30"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_35.cnf",
+      "mean": 0.06791915784000001,
+      "stddev": 0.0005960890637102764,
+      "median": 0.06806628284,
+      "user": 0.11649865999999999,
+      "system": 0.004013439999999999,
+      "min": 0.06726328284000001,
+      "max": 0.06842790784,
+      "times": [
+        0.06842790784,
+        0.06806628284,
+        0.06726328284000001
+      ],
+      "memory_usage_byte": [
+        54525952,
+        54525952,
+        54525952
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "35"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_35.cnf",
+      "mean": 0.07015942150666667,
+      "stddev": 0.00003664635788633725,
+      "median": 0.07014299084,
+      "user": 0.12766032666666663,
+      "system": 0.00387144,
+      "min": 0.07013386584,
+      "max": 0.07020140784000001,
+      "times": [
+        0.07020140784000001,
+        0.07014299084,
+        0.07013386584
+      ],
+      "memory_usage_byte": [
+        54525952,
+        54525952,
+        54525952
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "35"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_40.cnf",
+      "mean": 0.09197360150666667,
+      "stddev": 0.0005728592768266266,
+      "median": 0.09225382384,
+      "user": 0.16403799333333333,
+      "system": 0.006303773333333333,
+      "min": 0.09131457384000001,
+      "max": 0.09235240684,
+      "times": [
+        0.09225382384,
+        0.09235240684,
+        0.09131457384000001
+      ],
+      "memory_usage_byte": [
+        76824576,
+        76824576,
+        76824576
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "40"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_40.cnf",
+      "mean": 0.10843889384000001,
+      "stddev": 0.02216555432663745,
+      "median": 0.09584419984,
+      "user": 0.19145299333333332,
+      "system": 0.006613106666666667,
+      "min": 0.09544007384,
+      "max": 0.13403240784,
+      "times": [
+        0.09544007384,
+        0.09584419984,
+        0.13403240784
+      ],
+      "memory_usage_byte": [
+        76824576,
+        76824576,
+        83558400
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "40"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_45.cnf",
+      "mean": 0.14592150484000002,
+      "stddev": 0.000403511434426593,
+      "median": 0.14578636584000002,
+      "user": 0.33121866,
+      "system": 0.007775106666666666,
+      "min": 0.14560290784000002,
+      "max": 0.14637524084000003,
+      "times": [
+        0.14560290784000002,
+        0.14637524084000003,
+        0.14578636584000002
+      ],
+      "memory_usage_byte": [
+        93044736,
+        93044736,
+        93044736
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "45"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_45.cnf",
+      "mean": 0.1410413935066667,
+      "stddev": 0.0009533120218870276,
+      "median": 0.14084449084000003,
+      "user": 0.3172893266666667,
+      "system": 0.007425773333333333,
+      "min": 0.14020190784000003,
+      "max": 0.14207778184000003,
+      "times": [
+        0.14207778184000003,
+        0.14020190784000003,
+        0.14084449084000003
+      ],
+      "memory_usage_byte": [
+        93044736,
+        93044736,
+        93044736
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "45"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_50.cnf",
+      "mean": 0.18408050484000002,
+      "stddev": 0.007363656996015156,
+      "median": 0.17999636584000003,
+      "user": 0.42144232666666664,
+      "system": 0.010202106666666667,
+      "min": 0.17966399084,
+      "max": 0.19258115784000002,
+      "times": [
+        0.19258115784000002,
+        0.17966399084,
+        0.17999636584000003
+      ],
+      "memory_usage_byte": [
+        106381312,
+        106381312,
+        106381312
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "50"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_50.cnf",
+      "mean": 0.23670535184000005,
+      "stddev": 0.0006206827873213479,
+      "median": 0.23672632384000003,
+      "user": 0.6463183266666667,
+      "system": 0.009596106666666666,
+      "min": 0.23607444884000003,
+      "max": 0.23731528284000003,
+      "times": [
+        0.23607444884000003,
+        0.23731528284000003,
+        0.23672632384000003
+      ],
+      "memory_usage_byte": [
+        107462656,
+        107462656,
+        109379584
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "50"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_55.cnf",
+      "mean": 0.3612796995066667,
+      "stddev": 0.01297378659113145,
+      "median": 0.36690803284,
+      "user": 1.0252119933333332,
+      "system": 0.024011773333333333,
+      "min": 0.34644219984,
+      "max": 0.37048886584,
+      "times": [
+        0.36690803284,
+        0.34644219984,
+        0.37048886584
+      ],
+      "memory_usage_byte": [
+        145391616,
+        145391616,
+        145391616
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "55"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_55.cnf",
+      "mean": 0.5128769075066667,
+      "stddev": 0.032305177942246494,
+      "median": 0.49454799084,
+      "user": 1.6597283266666665,
+      "system": 0.020568106666666666,
+      "min": 0.49390486584000004,
+      "max": 0.5501778658400001,
+      "times": [
+        0.5501778658400001,
+        0.49454799084,
+        0.49390486584000004
+      ],
+      "memory_usage_byte": [
+        150700032,
+        150700032,
+        150700032
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "55"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_60.cnf",
+      "mean": 0.8639092961733335,
+      "stddev": 0.06737191678268513,
+      "median": 0.9013516988400001,
+      "user": 2.9757103266666665,
+      "system": 0.02376877333333333,
+      "min": 0.78613282384,
+      "max": 0.9042433658400001,
+      "times": [
+        0.78613282384,
+        0.9013516988400001,
+        0.9042433658400001
+      ],
+      "memory_usage_byte": [
+        162938880,
+        164839424,
+        164839424
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "60"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_60.cnf",
+      "mean": 0.7576257405066668,
+      "stddev": 0.06910635485661006,
+      "median": 0.7954386988400001,
+      "user": 2.586637993333333,
+      "system": 0.02159177333333333,
+      "min": 0.6778643238400001,
+      "max": 0.7995741988400001,
+      "times": [
+        0.6778643238400001,
+        0.7954386988400001,
+        0.7995741988400001
+      ],
+      "memory_usage_byte": [
+        174047232,
+        174047232,
+        174047232
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "60"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_65.cnf",
+      "mean": 1.4227804215066666,
+      "stddev": 0.32588983545426436,
+      "median": 1.59716199084,
+      "user": 5.117255326666666,
+      "system": 0.035051439999999996,
+      "min": 1.0468034078400001,
+      "max": 1.62437586584,
+      "times": [
+        1.0468034078400001,
+        1.62437586584,
+        1.59716199084
+      ],
+      "memory_usage_byte": [
+        229359616,
+        229359616,
+        229359616
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "65"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_65.cnf",
+      "mean": 0.7042330325066667,
+      "stddev": 0.007166977486027296,
+      "median": 0.7037360328400001,
+      "user": 2.29245166,
+      "system": 0.02462277333333333,
+      "min": 0.6973274908400001,
+      "max": 0.7116355738400001,
+      "times": [
+        0.7116355738400001,
+        0.7037360328400001,
+        0.6973274908400001
+      ],
+      "memory_usage_byte": [
+        229359616,
+        229359616,
+        229359616
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "65"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_66.cnf",
+      "mean": 1.1593972408400002,
+      "stddev": 0.22031949930970274,
+      "median": 1.0915156158400001,
+      "user": 4.088295993333333,
+      "system": 0.027685106666666667,
+      "min": 0.9810063658400001,
+      "max": 1.40566974084,
+      "times": [
+        0.9810063658400001,
+        1.40566974084,
+        1.0915156158400001
+      ],
+      "memory_usage_byte": [
+        229359616,
+        229359616,
+        229359616
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "66"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_66.cnf",
+      "mean": 1.02387582384,
+      "stddev": 0.027127859061797786,
+      "median": 1.01406336584,
+      "user": 3.5360013266666663,
+      "system": 0.02700377333333333,
+      "min": 1.0030195318400001,
+      "max": 1.05454457384,
+      "times": [
+        1.05454457384,
+        1.01406336584,
+        1.0030195318400001
+      ],
+      "memory_usage_byte": [
+        229359616,
+        229359616,
+        229359616
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "66"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_67.cnf",
+      "mean": 2.6231981301733334,
+      "stddev": 0.2791524431648084,
+      "median": 2.4783818658400003,
+      "user": 9.876932326666667,
+      "system": 0.05110410666666667,
+      "min": 2.44621244984,
+      "max": 2.9450000748400003,
+      "times": [
+        2.4783818658400003,
+        2.44621244984,
+        2.9450000748400003
+      ],
+      "memory_usage_byte": [
+        294354944,
+        294354944,
+        294354944
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "67"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_67.cnf",
+      "mean": 2.8652892551733338,
+      "stddev": 1.3282776556567526,
+      "median": 3.58634219984,
+      "user": 10.868791660000001,
+      "system": 0.054055106666666665,
+      "min": 1.33242174084,
+      "max": 3.67710382484,
+      "times": [
+        3.67710382484,
+        3.58634219984,
+        1.33242174084
+      ],
+      "memory_usage_byte": [
+        297713664,
+        314654720,
+        314654720
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "67"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_68.cnf",
+      "mean": 1.3267300465066667,
+      "stddev": 0.0018249271367088594,
+      "median": 1.32593049084,
+      "user": 4.732476326666666,
+      "system": 0.02688544,
+      "min": 1.3254413658400002,
+      "max": 1.3288182828400001,
+      "times": [
+        1.3254413658400002,
+        1.3288182828400001,
+        1.32593049084
+      ],
+      "memory_usage_byte": [
+        314654720,
+        314654720,
+        314654720
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "68"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_68.cnf",
+      "mean": 4.473398532173333,
+      "stddev": 0.46212636446374766,
+      "median": 4.56397140684,
+      "user": 17.198868326666666,
+      "system": 0.09139343999999999,
+      "min": 3.97269119884,
+      "max": 4.88353299084,
+      "times": [
+        4.56397140684,
+        3.97269119884,
+        4.88353299084
+      ],
+      "memory_usage_byte": [
+        380665856,
+        380665856,
+        380665856
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "68"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_69.cnf",
+      "mean": 5.717508462840001,
+      "stddev": 1.878960658460219,
+      "median": 6.76066065684,
+      "user": 22.13560866,
+      "system": 0.11546843999999999,
+      "min": 3.5483983658400002,
+      "max": 6.84346636584,
+      "times": [
+        3.5483983658400002,
+        6.84346636584,
+        6.76066065684
+      ],
+      "memory_usage_byte": [
+        428916736,
+        428916736,
+        428916736
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "69"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_69.cnf",
+      "mean": 7.660414296173333,
+      "stddev": 3.673209185859637,
+      "median": 7.45368882384,
+      "user": 29.840820660000002,
+      "system": 0.15668210666666665,
+      "min": 4.09493332384,
+      "max": 11.432620740840001,
+      "times": [
+        11.432620740840001,
+        7.45368882384,
+        4.09493332384
+      ],
+      "memory_usage_byte": [
+        432046080,
+        432046080,
+        432046080
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "69"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_70.cnf",
+      "mean": 7.541045185506666,
+      "stddev": 4.106196933824642,
+      "median": 8.06607624084,
+      "user": 29.313681326666664,
+      "system": 0.18208910666666667,
+      "min": 3.19758490784,
+      "max": 11.35947440784,
+      "times": [
+        3.19758490784,
+        8.06607624084,
+        11.35947440784
+      ],
+      "memory_usage_byte": [
+        446119936,
+        446119936,
+        446119936
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "70"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_70.cnf",
+      "mean": 13.962814421506666,
+      "stddev": 9.079185120341732,
+      "median": 12.24877057484,
+      "user": 54.83848766,
+      "system": 0.31178110666666664,
+      "min": 5.86281994884,
+      "max": 23.77685274084,
+      "times": [
+        12.24877057484,
+        5.86281994884,
+        23.77685274084
+      ],
+      "memory_usage_byte": [
+        446119936,
+        446119936,
+        446119936
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "70"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/order/temp_71.cnf",
+      "mean": 15.959715754506666,
+      "stddev": 2.740399014215986,
+      "median": 16.65629719884,
+      "user": 62.396201993333335,
+      "system": 0.47198243999999995,
+      "min": 12.93824949084,
+      "max": 18.28460057384,
+      "times": [
+        12.93824949084,
+        16.65629719884,
+        18.28460057384
+      ],
+      "memory_usage_byte": [
+        594034688,
+        594034688,
+        594034688
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "order",
+        "n": "71"
+      }
+    },
+    {
+      "command": "bin/glucose-syrup -model -verb=0 experiments/cnfs/norder/temp_71.cnf",
+      "mean": 16.255336338173333,
+      "stddev": 12.632625387549496,
+      "median": 19.32821515684,
+      "user": 63.88266366000001,
+      "system": 0.38019244,
+      "min": 2.36975582484,
+      "max": 27.06803803284,
+      "times": [
+        27.06803803284,
+        19.32821515684,
+        2.36975582484
+      ],
+      "memory_usage_byte": [
+        594034688,
+        594034688,
+        594034688
+      ],
+      "exit_codes": [
+        10,
+        10,
+        10
+      ],
+      "parameters": {
+        "dir": "norder",
+        "n": "71"
+      }
+    }
+  ]
+}

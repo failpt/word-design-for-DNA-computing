@@ -19,9 +19,9 @@ DEFAULT_SET_LEN = 25
 NO_ERROR_SOLVER_CODES = [10, 20]
 
 def sat_solve(encoder, out_file, binary, is_quiet):
-    """Fill ``out_file`` with the constructed CNF formula from ``encoder``
+    """ Fill ``out_file`` with the constructed CNF formula from ``encoder``
     in the DIMACS format, run the SAT solver ``binary`` and document the runtime &
-    output of the SAT solver. Print the decoded output."""
+    output of the SAT solver. Print the decoded output. """
     with open(out_file, "w") as f:
         f.write(encoder.to_dimacs())
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     )
     
     parser.add_argument(
-        "-o", 
+        "-of", 
         "--output", 
         default=DEFAULT_CNF_OUT_FILE, 
         type=str, 
@@ -87,6 +87,13 @@ if __name__ == "__main__":
         help="suppress solver output"
     )
     
+    parser.add_argument( 
+        "-ord",
+        "--order", 
+        action="store_true",
+        help="makes sure the words are fully ordered (by bit encoding)"
+    )
+    
     args = parser.parse_args()
-    encoder = DNAEncoder(args.number)
+    encoder = DNAEncoder(args.number, args.order)
     sat_solve(encoder, args.output, args.solver, args.quiet)
