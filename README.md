@@ -95,9 +95,9 @@ I compared the **mean runtimes** of the solvers with and without the ordering co
 </p>
 
 <p align="center">
-  <img src="experiments/plots/glucose.png" width="33%">
-  <img src="experiments/plots/kissat.png" width="33%">
-  <img src="experiments/plots/cadical.png" width="33%">
+  <img src="experiments/plots/glucose.png" width="32.9%">
+  <img src="experiments/plots/kissat.png" width="32.9%">
+  <img src="experiments/plots/cadical.png" width="32.9%">
 </p>
 
 You may find the `.cnf` for each size in `experiments/cnfs/` and the hyperfine reports in `experiments/logs/`. 
