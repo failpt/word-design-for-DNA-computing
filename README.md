@@ -78,24 +78,33 @@ Options:
 You may view the `.cnf` files for each of the examples inside `examples/`.
 
 ## Experiments
-To compare the performance of the three SAT solvers, I ran a race with the help of [hyperfine](https://github.com/sharkdp/hyperfine) and plotted the results.
-I fed the set sizes {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 66, 67, 68, 69, 70, 71} to all three solvers and {72, 74, 75, 76, 78, 80, 81, 82, 83} only to Kissat and CaDiCaL, deeming Glucose too slow to continue. Hyperfine ran each batch 4 times.
+To compare the performance of the three SAT solvers, I fed the set sizes {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 66, 67, 68, 69, 70, 71} to all three solvers and {72, 74, 75, 76, 78, 80, 81, 82, 83} only to Kissat and CaDiCaL, deeming Glucose too slow to continue. I measured the results with [hyperfine](https://github.com/sharkdp/hyperfine), which ran each batch four times.
 
-I compared the **mean runtimes** of the solvers with and without the ordering constraint that eliminated all word permutations, and the results are interesting.
+I compared the **mean runtimes** of the solvers with and without the ordering constraint that eliminated all word permutations.
 
-With ordering:
 <p align="center">
-  <img src="race/plots/plot_all.png" width="49.7%">
-  <img src="race/plots/plot_no_glucose.png" width="49.7%">
+  <img src="race/plots/order/all.png" width="49.7%">
+  <img src="race/plots/norder/all.png" width="49.7%">
 </p>
 
-Experiments were run on Apple M3 Pro CPU (arm64) with 18 GB of unified memory on macOS 15.4.1 (Sequoia). You may find the `.cnf` for each size in `race/cnfs/` and the hyperfine reports in `race/logs/`. 
+<p align="center">
+  <img src="race/plots/order/kissat_and_cadical.png" width="49.7%">
+  <img src="race/plots/norder/kissat_and_cadical.png" width="49.7%">
+</p>
 
-If you wish to play with the plotting, you may edit `race/race.py` and run 
+<p align="center">
+  <img src="experiments/plots/glucose.png" width="33.3%">
+  <img src="experiments/plots/kissat.png" width="33.3%">
+  <img src="race/plots/CaDiCaL.png" width="33.3%">
+</p>
+
+Experiments were run on Apple M3 Pro CPU (arm64) with 18 GB of unified memory on macOS 15.4.1 (Sequoia). You may find the `.cnf` for each size in `experiments/cnfs/` and the hyperfine reports in `experiments/logs/`. 
+
+If you wish to play with the plotting, you may edit `experiments.py` and run 
 ```
-% PYTHONPATH=. race/race.py
+% ./experiments.py
 ```
-from the root repository (don't forget to make `race.py` executable with `chmod +x`)
+from the root directory (don't forget to make `experiments.py` executable with `chmod +x` and remove `experiments/`)
 
 ## Results
 The four biggest sets I found so far are of size **84**. You may find the formula for this size in `formula.cnf`.
