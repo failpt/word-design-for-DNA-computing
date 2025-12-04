@@ -8,11 +8,9 @@ Given a fixed size $n$, I try to find a set of $n$ strings satisfying the proble
 
 We encode a word with two bits per letter: `A=10, C=00, G=01, T=11`; this bijection is particularly convenient because it breaks the set into {A, T} and {C, G} by the first bit, and we only need to flip one bit to get a complement letter.
 
-We encode a set of size $n$ with two/four sets of variables, depending on the value of `eliminate_permutations` the user passes to `DNAEncoder`: $Var(w, p, b)$ representing the $b$-th bit of the $p$-th position of word $w$ indexed from 0, $Match(w_1, w_2, p)$ representing wether words $w_1$ and $w_2$ have the same letter in position $p$ and, if `eliminate_permutations=True`, $PrevEq(w_1, w_2, p, b)$ representing wether words $w_1$ and $w_2$ are identical up to excluding $b$-th bit at $p$-th position and $CurrEq(w_1, w_2, p, b)$ representing the same thing including the current bit. We need $PrevEq,CurrEq$ to order every pair of words (by MSB), effectively eliminating permuations. 
+We encode a set of size $n$ with two/four sets of variables, depending on the value of `eliminate_permutations` the user passes to `DNAEncoder`: $Var(w, p, b)$ representing the $b$-th bit of the $p$-th position of word $w$ indexed from 0, $Match(w_1, w_2, p)$ representing wether words $w_1$ and $w_2$ have the same letter in position $p$ and, if `eliminate_permutations=True`, $PrevEq(w_1, w_2, p, b)$ representing whether words $w_1$ and $w_2$ are identical up to and excluding the $b$-th bit at $p$-th position, and $CurrEq(w_1, w_2, p, b)$ representing equality up to (and including) the current bit. We need $PrevEq,CurrEq$ to order every pair of words (by MSB), effectively eliminating permuations. 
 
-`eliminate_permutations` was made in an optimization attempt by reducing the search space, but in practice it ended up slowing down certain solvers, because they had to seed out sets that were technically correct until they were to find an ordered one. That is why I added the `--order` option instead of hardwiring it into the encoder.
-
-We represent the problem constraints as a conjunction of clauses:
+We represent the problem constraints as a conjunction of the following clauses:
 - **No 5 letters of any word belong to {A, T} or {C, G}**
   
   For every $C\subset [8]$ s.t. $|C|=5$:
@@ -25,7 +23,7 @@ We represent the problem constraints as a conjunction of clauses:
   
   $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1} \vee Var(w_j, p, 0)^{b_0} \vee Var(w_j, p, 1)^{b_1} \vee Match(w_i, w_j, p)$
   
-  I.e., if the $w_i,w_j$ have the same letter at position $p$, the Match variable must be True.
+  I.e., if $w_i, w_j$ have the same letter at position $p$, the $Match(w_i, w_j, p)$ variable must be True.
   
   Then, for every $C\subset [8]$ s.t. $|C|=5$:
   
@@ -45,17 +43,23 @@ We represent the problem constraints as a conjunction of clauses:
 
 - **Ordering Constraint** if `eliminate_permutations=True`
   
-  $\forall w_i, w_{i+1}: i\in[n-1]$, position $p \in [8]$, and bit $b \in \{0, 1\}$:
+  $\forall w_i, w_{i+1}: i\in[n-2]$, position $p \in [8]$, and bit $b \in \{0, 1\}$:
   
-  $(\neg CurrEq(w_i, w_{i+1}, p, b)\vee PrevEq(w_i, w_{i+1}, p, b)) \wedge (\neg CurrEq(w_i, w_{i+1}, p, b)\vee\neg Var(w_i, p, b)\vee Var(w_{i+1}, p, b)) \wedge (\neg CurrEq(w_i, w_{i+1}, p, b)\vee Var(w_i, p, b) \vee \neg Var(w_{i+1}, p, b))$
+  $\neg CurrEq(w_i,w_{i+1},p,b)\vee PrevEq(w_i,w_{i+1},p,b)$
   
-  I.e., $CurrEq(w_i, w_{i+1}, p, b)\Rightarrow PrevEq(w_i, w_{i+1}, p, b)$ is true AND the current bits are identical.
+  $\neg CurrEq(w_i,w_{i+1},p,b)\vee \neg Var(w_i,p,b)\vee Var(w_{i+1},p,b)$
+  
+  $\neg CurrEq(w_i,w_{i+1},p,b)\vee Var(w_i,p,b)\vee \neg Var(w_{i+1},p,b)$
+  
+  I.e., $CurrEq$ implies $PrevEq$ (equality at previous step) AND the current bits are identical ($u \leftrightarrow v$).
   
   $\neg PrevEq(w_i, w_{i+1}, p, b) \vee \neg Var(w_i, p, b) \vee Var(w_{i+1}, p, b)$
   
-  I.e., if $PrevEq(w_i, w_{i+1}, p, b)$ is true, we forbid the case where $w_i$ has a 1 and $w_{i+1}$ has a 0 (enforcing $w_i < w_{i+1}$).
+  I.e., if $PrevEq$ is true, we forbid the case where $w_i$ has a 1 and $w_{i+1}$ has a 0 (enforcing $w_i \le w_{i+1}$).
   
-  And since words cannot be identical $\neg CurrEq(w_{n-2}, w_{n-1}, 7, 1)$.
+  And since words cannot be identical:
+
+  $\neg CurrEq(w_{n-2}, w_{n-1}, 7, 1)$.
 
 ## Running the code
 Usage:
