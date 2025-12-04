@@ -19,6 +19,7 @@ Options:
   -s SOLVER, --solver SOLVER
                         the SAT solver binary name             (default: bin/glucose-syrup)
   -q, --quiet           suppress solver output
+  -ord, --order         makes sure the words are fully ordered (by bit encoding)
 ```
 
 ## Examples
