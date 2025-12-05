@@ -3,68 +3,6 @@ This is an experimental project attempting to solve [problem 033](https://www.cs
 
 Given a fixed size $n$, I try to find a set of $n$ strings satisfying the problem constraints. I introduce a `cnfencoder` package containing `DNAEncoder`, which  reduces the problem of finding a set of a given size to SAT (helps construct a CNF formula to feed the solver and decode the solution). In pursuit of experimentation, I use three different SAT solvers – [Glucose](https://github.com/audemard/glucose), [Kissat](https://github.com/arminbiere/kissat), and [CaDiCaL](https://github.com/arminbiere/cadical) ([paper](https://cca.informatik.uni-freiburg.de/papers/BiereFallerFazekasFleuryFroleyksPollitt-CAV24.pdf)) –  and compare their performance on fixed input sizes.
 
-## Encoding
-*Notation:* $[n]$ denotes the set { $0, ..., n-1$ }, $w^b$ is $w$ if $b=0$ and $\neg w$ otherwise
-
-We encode a word with two bits per letter: `A=10, C=00, G=01, T=11`; this bijection is particularly convenient because it breaks the set into {A, T} and {C, G} by the first bit, and we only need to flip one bit to get a complement letter.
-
-We encode a set of size $n$ with two/four sets of variables, depending on the value of `eliminate_permutations` the user passes to `DNAEncoder`: $Var(w, p, b)$ representing the $b$-th bit of the $p$-th position of word $w$ indexed from 0, $Match(w_1, w_2, p)$ representing wether words $w_1$ and $w_2$ have the same letter in position $p$ and, if `eliminate_permutations=True`, $PrevEq(w_1, w_2, p, b)$ representing whether words $w_1$ and $w_2$ are identical up to *and excluding* the $b$-th bit at $p$-th position, and $CurrEq(w_1, w_2, p, b)$ representing equality up to *and including* the current bit. We need $PrevEq,CurrEq$ to order every pair of words (by MSB), effectively eliminating permuations. 
-
-The last two were made in an optimization attempt via search space reduction, but in practice it ended up slowing down certain solvers, because they had to seed out sets that were technically correct until they were to find an ordered one. That is why I added the --order option instead of hardwiring it into the encoder.
-
-We represent the problem constraints as a conjunction of the following clauses:
-- For every $C\subset [8]$ s.t. $|C|=5$:
-  
-  $\bigwedge_{w\in [n]}(\bigvee_{p\in C}Var(w, p, 0))\wedge (\bigvee_{p\in C}\neg Var(w, p, 0))$
-
-  *(No 5 letters of any word belong to {A, T} or {C, G})*
-
-- $\forall w_i, w_j: i,j \in [n]$ and $i<j$ (to eliminate redundant clauses), position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
-  
-  * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1} \vee Var(w_j, p, 0)^{b_0} \vee Var(w_j, p, 1)^{b_1} \vee Match(w_i, w_j, p)$
- 
-    I.e., if $w_i, w_j$ have the same letter at position $p$, the $Match(w_i, w_j, p)$ variable must be True.
-  
-  * $\forall C\subset [8]$ s.t. $|C|=5$:
-  
-    $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
-    
-  *(Hamming distance)*
-
-- $\forall w_i, w_j: i,j \in [n]$ and $i\leq j$, position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
-  
-  * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1 \oplus 1} \vee Var(w_j, 7-p, 0)^{b_0} \vee Var(w_j, 7-p, 1)^{b_1} \vee Match(w_i, w_j, p)$
-
-    We compare $w_j$ at $7-p$ to get its reverse; the second bit of $w_i$ is flipped to get the complement.
-
-  * $\forall C\subset [8]$ s.t. $|C|=5$:
-
-    $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
-
-  *(Reverse & Watson-Crick distance)*
-
-- **If** `eliminate_permutations=True`**:**
-  
-  $\forall w_i, w_{i+1}: i\in[n-2]$, position $p \in [8]$, and bit $b \in \{0, 1\}$:
-  
-  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee PrevEq(w_i,w_{i+1},p,b)$
-  
-  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee \neg Var(w_i,p,b)\vee Var(w_{i+1},p,b)$
-  
-  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee Var(w_i,p,b)\vee \neg Var(w_{i+1},p,b)$
-  
-    I.e., $CurrEq$ implies $PrevEq$ (equality at previous step) AND the current bits are identical ($u \leftrightarrow v$).
-  
-  * $\neg PrevEq(w_i, w_{i+1}, p, b) \vee \neg Var(w_i, p, b) \vee Var(w_{i+1}, p, b)$
-
-    I.e., if $PrevEq$ is true, we forbid the case where $w_i$ has a 1 and $w_{i+1}$ has a 0.
-  
-  * $\neg CurrEq(w_{n-2}, w_{n-1}, 7, 1)$
-
-    I.e., words cannot be identical.
-
-  *(Total order)*
-
 ## Running the code
 Usage:
 ```
@@ -140,6 +78,68 @@ Options:
    TTTCCGCT | TGAAAGGG | CTGGAAAG | GCCGTAAT | ATACGCGT | TTCGTCGT | TTAGCAGG | TACTACCG | TGCCTGAA | GCTTGCAA | TCGTGCTT | CTATGACC | TGGGTGTT | TAAAGCGC | GGGAGAAT | GAATGGTG | TGACTCCT | CTTCTAGG | GATGGAAC | GACTCGAT | TGGTCATC | AACTGCTC | GCAGATCT | TAAGCGTC | TTCACCTG | GGTACCTT | TCGGAACA | CGCAACAT | GCAGGATA | GGCATTGA | AGCACAGT | AGTGCGTA | CACATGCT | CTACCTAC | AGTTGGGT | TGCTTAGG | GATAGTCG | CGAAATCC | CAGCCAAT | TACCGTAG | GAGAGCTA | CTGAGTTG | ACGTGAGA | GTGTCACA | CCAACCTA | GCATAGGA | AGATGCAG | TGCCGATT | ACCACTTC | AGTAACCG | TCCTCGTA | ATGAGCAC | ACAAGTGG | CATTGCCT | ATCCCTGA | CAGTCTGA | GTCTGAGT | CCTTGTTC | GGTAAAGC | AGAGTGAC | TCGTAGAG | ACCGTCTA | CATACACC | CTTGGTGT | GTCAAGAG | CGAGCTTT | GGATACTC | CCGATTAC | GCTTCTGT | TGTAGGTC | CATGAGTG
    ```
 You may view the `.cnf` files for each of the examples inside `examples/`.
+
+## Encoding
+*Notation:* $[n]$ denotes the set { $0, ..., n-1$ }, $w^b$ is $w$ if $b=0$ and $\neg w$ otherwise
+
+We encode a word with two bits per letter: `A=10, C=00, G=01, T=11`; this bijection is particularly convenient because it breaks the set into {A, T} and {C, G} by the first bit, and we only need to flip one bit to get a complement letter.
+
+We encode a set of size $n$ with two/four sets of variables, depending on the value of `eliminate_permutations` the user passes to `DNAEncoder`: $Var(w, p, b)$ representing the $b$-th bit of the $p$-th position of word $w$ indexed from 0, $Match(w_1, w_2, p)$ representing wether words $w_1$ and $w_2$ have the same letter in position $p$ and, if `eliminate_permutations=True`, $PrevEq(w_1, w_2, p, b)$ representing whether words $w_1$ and $w_2$ are identical up to *and excluding* the $b$-th bit at $p$-th position, and $CurrEq(w_1, w_2, p, b)$ representing equality up to *and including* the current bit. We need $PrevEq,CurrEq$ to order every pair of words (by MSB), effectively eliminating permuations. 
+
+The last two were made in an optimization attempt via search space reduction, but in practice it ended up slowing down certain solvers, because they had to seed out sets that were technically correct until they were to find an ordered one. That is why I added the --order option instead of hardwiring it into the encoder.
+
+We represent the problem constraints as a conjunction of the following clauses:
+- For every $C\subset [8]$ s.t. $|C|=5$:
+  
+  $\bigwedge_{w\in [n]}(\bigvee_{p\in C}Var(w, p, 0))\wedge (\bigvee_{p\in C}\neg Var(w, p, 0))$
+
+  *(No 5 letters of any word belong to {A, T} or {C, G})*
+
+- $\forall w_i, w_j: i,j \in [n]$ and $i<j$ (to eliminate redundant clauses), position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
+  
+  * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1} \vee Var(w_j, p, 0)^{b_0} \vee Var(w_j, p, 1)^{b_1} \vee Match(w_i, w_j, p)$
+ 
+    I.e., if $w_i, w_j$ have the same letter at position $p$, the $Match(w_i, w_j, p)$ variable must be True.
+  
+  * $\forall C\subset [8]$ s.t. $|C|=5$:
+  
+    $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
+    
+  *(Hamming distance)*
+
+- $\forall w_i, w_j: i,j \in [n]$ and $i\leq j$, position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
+  
+  * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1 \oplus 1} \vee Var(w_j, 7-p, 0)^{b_0} \vee Var(w_j, 7-p, 1)^{b_1} \vee Match(w_i, w_j, p)$
+
+    We compare $w_j$ at $7-p$ to get its reverse; the second bit of $w_i$ is flipped to get the complement.
+
+  * $\forall C\subset [8]$ s.t. $|C|=5$:
+
+    $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
+
+  *(Reverse & Watson-Crick distance)*
+
+- **If** `eliminate_permutations=True`**:**
+  
+  $\forall w_i, w_{i+1}: i\in[n-2]$, position $p \in [8]$, and bit $b \in \{0, 1\}$:
+  
+  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee PrevEq(w_i,w_{i+1},p,b)$
+  
+  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee \neg Var(w_i,p,b)\vee Var(w_{i+1},p,b)$
+  
+  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee Var(w_i,p,b)\vee \neg Var(w_{i+1},p,b)$
+  
+    I.e., $CurrEq$ implies $PrevEq$ (equality at previous step) AND the current bits are identical ($u \leftrightarrow v$).
+  
+  * $\neg PrevEq(w_i, w_{i+1}, p, b) \vee \neg Var(w_i, p, b) \vee Var(w_{i+1}, p, b)$
+
+    I.e., if $PrevEq$ is true, we forbid the case where $w_i$ has a 1 and $w_{i+1}$ has a 0.
+  
+  * $\neg CurrEq(w_{n-2}, w_{n-1}, 7, 1)$
+
+    I.e., words cannot be identical.
+
+  *(Total order)*
 
 ## Experiments
 *Experiments were run on Apple M3 Pro CPU (arm64) with 18 GB of unified memory on macOS 15.4.1 (Sequoia).*
