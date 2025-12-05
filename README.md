@@ -111,7 +111,7 @@ We represent the problem constraints as a conjunction of the following clauses:
   
   * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1 \oplus 1} \vee Var(w_j, 7-p, 0)^{b_0} \vee Var(w_j, 7-p, 1)^{b_1} \vee Match(w_i, w_j, p)$
 
-    We compare $w_j$ at $7-p$ to get its reverse; the second bit of $w_i$ is flipped to get the complement.
+    We evaluate $w_j$ at $7-p$ to get its reverse; the second bit of $w_i$ is flipped to get its complement.
 
   * $\forall C\subset [8]$ s.t. $|C|=5$:
 
@@ -129,7 +129,7 @@ We represent the problem constraints as a conjunction of the following clauses:
   
   * $\neg CurrEq(w_i,w_{i+1},p,b)\vee Var(w_i,p,b)\vee \neg Var(w_{i+1},p,b)$
   
-    I.e., $CurrEq$ implies $PrevEq$ (equality at previous step) AND the current bits are identical ($u \leftrightarrow v$).
+    I.e., $CurrEq$ implies $PrevEq$ and equality of the current bits ( $Var(w_i,p,b) \leftrightarrow Var(w_{i+1},p,b)$ ).
   
   * $\neg PrevEq(w_i, w_{i+1}, p, b) \vee \neg Var(w_i, p, b) \vee Var(w_{i+1}, p, b)$
 
@@ -164,7 +164,7 @@ I compared the **mean runtimes** of the solvers with and without the ordering co
   <img src="experiments/plots/cadical.png" width="32.93%">
 </p>
 
-I conclude that for larger sets, Kissat performs better when the ordering constraint *is enforced*, while CaDiCaL and Glucose are actually getting significantly slower, and that the current fastest option for finding them is unordered CaDiCaL.
+I conclude that for larger sets, Kissat performs better when the ordering constraint is enforced, while CaDiCaL and Glucose are actually getting significantly slower, and that the current fastest option for finding them is unordered CaDiCaL.
 
 You may find the `.cnf` for each size in `experiments/cnfs/` and the hyperfine reports in `experiments/logs/`. 
 
