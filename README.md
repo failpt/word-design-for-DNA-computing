@@ -80,7 +80,7 @@ Options:
 You may view the `.cnf` files for each of the examples inside `examples/`.
 
 ## Encoding
-*Notation:* $[n]$ denotes the set { $0, ..., n-1$ }, $w^b$ is $w$ if $b=0$ and $\neg w$ otherwise
+*Notation:* $[n]$ denotes the set {0, ..., n-1}, $w^b$ is $w$ if $b=0$ and $\neg w$ otherwise
 
 We encode a word with two bits per letter: `A=10, C=00, G=01, T=11`; this bijection is particularly convenient because it breaks the set into {A, T} and {C, G} by the first bit, and we only need to flip one bit to get a complement letter.
 
@@ -95,7 +95,7 @@ We represent the problem constraints as a conjunction of the following clauses:
 
   *(No 5 letters of any word belong to {A, T} or {C, G})*
 
-- $\forall w_i, w_j: i,j \in [n]$ and $i<j$ (to eliminate redundant clauses), position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
+- $\forall w_i, w_j: i,j \in [n]$ and $i<j$ (to eliminate redundant clauses), position $p \in [8]$, and bit pattern $b_0, b_1 \in$ {0, 1}:
   
   * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1} \vee Var(w_j, p, 0)^{b_0} \vee Var(w_j, p, 1)^{b_1} \vee Match(w_i, w_j, p)$
  
@@ -107,7 +107,7 @@ We represent the problem constraints as a conjunction of the following clauses:
     
   *(Hamming distance)*
 
-- $\forall w_i, w_j: i,j \in [n]$ and $i\leq j$, position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
+- $\forall w_i, w_j: i,j \in [n]$ and $i\leq j$, position $p \in [8]$, and bit pattern $b_0, b_1 \in$ {0, 1}:
   
   * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1 \oplus 1} \vee Var(w_j, 7-p, 0)^{b_0} \vee Var(w_j, 7-p, 1)^{b_1} \vee Match(w_i, w_j, p)$
 
@@ -121,7 +121,7 @@ We represent the problem constraints as a conjunction of the following clauses:
 
 - **If** `eliminate_permutations=True`**:**
   
-  $\forall w_i, w_{i+1}: i\in[n-2]$, position $p \in [8]$, and bit $b \in \{0, 1\}$:
+  $\forall w_i, w_{i+1}: i\in[n-2]$, position $p \in [8]$, and bit $b \in$ {0, 1}:
   
   * $\neg CurrEq(w_i,w_{i+1},p,b)\vee PrevEq(w_i,w_{i+1},p,b)$
   
