@@ -11,55 +11,57 @@ We encode a word with two bits per letter: `A=10, C=00, G=01, T=11`; this biject
 We encode a set of size $n$ with two/four sets of variables, depending on the value of `eliminate_permutations` the user passes to `DNAEncoder`: $Var(w, p, b)$ representing the $b$-th bit of the $p$-th position of word $w$ indexed from 0, $Match(w_1, w_2, p)$ representing wether words $w_1$ and $w_2$ have the same letter in position $p$ and, if `eliminate_permutations=True`, $PrevEq(w_1, w_2, p, b)$ representing whether words $w_1$ and $w_2$ are identical up to and excluding the $b$-th bit at $p$-th position, and $CurrEq(w_1, w_2, p, b)$ representing equality up to (and including) the current bit. We need $PrevEq,CurrEq$ to order every pair of words (by MSB), effectively eliminating permuations. 
 
 We represent the problem constraints as a conjunction of the following clauses:
-- **No 5 letters of any word belong to {A, T} or {C, G}**
-  
-  For every $C\subset [8]$ s.t. $|C|=5$:
+- For every $C\subset [8]$ s.t. $|C|=5$:
   
   $\bigwedge_{w\in [n]}(\bigvee_{p\in C}Var(w, p, 0))\wedge (\bigvee_{p\in C}\neg Var(w, p, 0))$
 
-- **Hamming distance**
+  *(No 5 letters of any word belong to {A, T} or {C, G})*
 
-  $\forall w_i, w_j: i,j \in [n]$ and $i<j$ (to eliminate redundant clauses), position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
+- $\forall w_i, w_j: i,j \in [n]$ and $i<j$ (to eliminate redundant clauses), position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
   
-  $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1} \vee Var(w_j, p, 0)^{b_0} \vee Var(w_j, p, 1)^{b_1} \vee Match(w_i, w_j, p)$
+  * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1} \vee Var(w_j, p, 0)^{b_0} \vee Var(w_j, p, 1)^{b_1} \vee Match(w_i, w_j, p)$
+ 
+    I.e., if $w_i, w_j$ have the same letter at position $p$, the $Match(w_i, w_j, p)$ variable must be True.
   
-  I.e., if $w_i, w_j$ have the same letter at position $p$, the $Match(w_i, w_j, p)$ variable must be True.
+  * $\forall C\subset [8]$ s.t. $|C|=5$:
   
-  Then, for every $C\subset [8]$ s.t. $|C|=5$:
-  
-  $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
+    $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
+    
+  *(Hamming distance)*
 
-- **Reverse complement distance**
+- $\forall w_i, w_j: i,j \in [n]$ and $i\leq j$, position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
   
-  $\forall w_i, w_j: i,j \in [n]$ and $i\leq j$, position $p \in [8]$, and bit pattern $b_0, b_1 \in \{0, 1\}$:
-  
-  $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1 \oplus 1} \vee Var(w_j, 7-p, 0)^{b_0} \vee Var(w_j, 7-p, 1)^{b_1} \vee Match(w_i, w_j, p)$
+  * $Var(w_i, p, 0)^{b_0} \vee Var(w_i, p, 1)^{b_1 \oplus 1} \vee Var(w_j, 7-p, 0)^{b_0} \vee Var(w_j, 7-p, 1)^{b_1} \vee Match(w_i, w_j, p)$
 
-  We compare $w_i$ at $p$ to $w_j$ at $7-p$ because of the reverse. The second bit of $w_i$ is flipped to get the complement.
+    We compare $w_j$ at $7-p$ to get its reverse; the second bit of $w_i$ is flipped to get the complement.
 
-  Then, for every $C\subset [8]$ s.t. $|C|=5$:
+  * $\forall C\subset [8]$ s.t. $|C|=5$:
 
-  $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
+    $\bigvee_{p\in C} \neg Match(w_i, w_j, p)$
 
-- **Ordering Constraint** if `eliminate_permutations=True`
+  *(Reverse & Watson-Crick distance)*
+
+- **If** `eliminate_permutations=True`**:**
   
   $\forall w_i, w_{i+1}: i\in[n-2]$, position $p \in [8]$, and bit $b \in \{0, 1\}$:
   
-  $\neg CurrEq(w_i,w_{i+1},p,b)\vee PrevEq(w_i,w_{i+1},p,b)$
+  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee PrevEq(w_i,w_{i+1},p,b)$
   
-  $\neg CurrEq(w_i,w_{i+1},p,b)\vee \neg Var(w_i,p,b)\vee Var(w_{i+1},p,b)$
+  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee \neg Var(w_i,p,b)\vee Var(w_{i+1},p,b)$
   
-  $\neg CurrEq(w_i,w_{i+1},p,b)\vee Var(w_i,p,b)\vee \neg Var(w_{i+1},p,b)$
+  * $\neg CurrEq(w_i,w_{i+1},p,b)\vee Var(w_i,p,b)\vee \neg Var(w_{i+1},p,b)$
   
-  I.e., $CurrEq$ implies $PrevEq$ (equality at previous step) AND the current bits are identical ($u \leftrightarrow v$).
+    I.e., $CurrEq$ implies $PrevEq$ (equality at previous step) AND the current bits are identical ($u \leftrightarrow v$).
   
-  $\neg PrevEq(w_i, w_{i+1}, p, b) \vee \neg Var(w_i, p, b) \vee Var(w_{i+1}, p, b)$
-  
-  I.e., if $PrevEq$ is true, we forbid the case where $w_i$ has a 1 and $w_{i+1}$ has a 0 (enforcing $w_i \le w_{i+1}$).
-  
-  And since words cannot be identical:
+  * $\neg PrevEq(w_i, w_{i+1}, p, b) \vee \neg Var(w_i, p, b) \vee Var(w_{i+1}, p, b)$
 
-  $\neg CurrEq(w_{n-2}, w_{n-1}, 7, 1)$.
+    I.e., if $PrevEq$ is true, we forbid the case where $w_i$ has a 1 and $w_{i+1}$ has a 0.
+  
+  * $\neg CurrEq(w_{n-2}, w_{n-1}, 7, 1)$
+
+    I.e., words cannot be identical.
+
+  *(Total order)*
 
 ## Running the code
 Usage:
@@ -80,8 +82,9 @@ Options:
   -ord, --order         makes sure the words are fully ordered (by bit encoding)
 ```
 
+#### If you are not working on a Unix-based system, replace `./script.py` with `python script.py` in all the following code.
 ## Examples
-1. ```
+ ```
    % ./word_design.py -of examples/example1.cnf -q
    ```
    Output:
@@ -90,7 +93,7 @@ Options:
    CATCAACC | CGATGAGA | CCCGTAAA | AGAGACGT | TTCCCTTC | ACCCAAAC | CTTGGCAT | TGCCTCTT | CAGGACTT | CGTAGCTA | GGCGTTTA | AATCGAGG | TCCAAGCT | GCCTTAGT | CGACTGAA | GATTACGC | CACACGTA | CCCAATTG | GGACATTC | CTAACAGC | CTTCGTCA | TGTCACGA | ATGACGTC | CCATCCAA | CTACCCTT
    ```
 ---
-2. ```
+ ```
    % ./word_design.py -n 54 -of examples/example2.cnf -s bin/kissat -q -ord
    ```
    Output:
@@ -99,7 +102,7 @@ Options:
    GAACCATC | CTTCGATC | GGAAATGC | GGTTTAGC | CTAGACTC | CAATCCTG | CCAGGTAA | CTTATGGC | CACGTATC | GTCGCAAT | CCGACTTA | CCTTAGTC | CACCAACA | GCCTGTTA | CACACCAT | GACTTCCT | GTGAGCTA | CATCTTCC | CCACTACT | GTCAAGCT | CTCATCCA | GTGTCACA | GTTACCGT | CCCTCAAA | CGAACAAC | GCGTACAT | GCAACAGA | CCTAACAG | GTTCACCA | GCACCTAT | CCATACCA | CTCTCTCT | GTCCTTGT | CTACCCAA | GACACTCA | CCTCATGA | GCTCTCTT | CCTGCATT | CTCCATAC | ATCTGGCA | AGACCACA | TCTACCCA | ACCACACT | ACCGATCA | ACACACGT | AATCCCCT | AACAACCC | ACTCTGCA | ATCCCGTT | ATAACGCG | AAACGTCG | TTAGCCCT | TTCTACCG | ATACTCCC
    ```
 ---
-3. ```
+ ```
    % ./word_design.py -n 69 -of examples/example3.cnf -s bin/glucose-syrup -q 
    ```
    Output:
@@ -108,7 +111,7 @@ Options:
    GTAGAGCA | GACTTGAG | CCAGTCAT | ATGTGGGT | AGCGCATT | TTGGGTTG | GCGTCAAT | TACCCAGT | CCATGCTA | CGAGAAAG | TCTGTCTG | CGTCGTAT | GGTATGTG | CTTCAGAG | CTAGCTTC | TACTTCGC | ATCATGCG | TAGTCGTC | CATCACTC | GGAGTACT | GCCATTCT | CCGTAATC | TTTGCAGG | GTTGGTGA | AAGGTGGA | TTCCGTCT | CCTGATCT | ACGGATAG | CAAACGTG | TGGACACT | GTCTAAGC | CCTTCGTT | TATGGTCC | TCTCCTGA | TTGTCCAG | GACAAGGT | TTGAGCCA | GCCTCTTA | GTCACATG | ACTTGTGC | TACACTCG | CCACTACA | TGCTACTG | TGTCAAGC | CCGAGTTT | CTGTTGTG | TGTGTGGT | GCTCATTG | AGGTCCTA | CCAAATGC | GAATCGGA | CAGGGAAT | TACGGGTT | TAATGGCG | CTGCTTGA | GAGATTGC | TCGATAGG | CTTACCAC | GTTCCACT | GGCAGAAA | GAGCCTTT | AACAGGAC | TGAAACCC | GTGCATAC | ATGCTCCT | TCCTGGAA | AGGCTTTC | ACTAACCG | ACAGAACC
    ```
 ---
-4. ```
+ ```
    % ./word_design.py -n 69 -of examples/example4.cnf -s bin/cadical -q -ord
    ```
    Output:
@@ -117,7 +120,7 @@ Options:
    CGGCTAAA | CGGACATT | GCCCTTTT | GATTGGCA | GGTTTGTG | CGGGATTA | GGTCTACT | GCGAACTA | GCTTCCAT | GTTCGTTC | GACTCGTT | CCTGCTTT | GCATTGCT | GTTCAGGA | CAGATGGA | GTGTGCTT | CTTTTGCC | GTGGTGTA | GGGTTTCA | GTCAAGCT | CGTGTCAT | CGACGTTT | GGTATCGA | CCATTCTC | CAAGACAG | CTGAAGTC | CACGTTGT | GAGAGACT | CCGTGTAA | GTCGGAAA | CTACCGTA | GCAAAGAC | CAGTGATC | CTTCACCT | GCTGTATC | CCGAATCT | CTCTGGAT | CCCACAAA | CTTGGATG | GGGTAGAT | GGATGCAA | CTCATTCG | CTCGATAC | GATGATCC | GTAAGAGG | GCACATCA | GAGTCTAC | GTGTCAGA | TCTACGCA | ACTCTAGG | TCCTATGG | ATAGCTCC | ACTTGGTC | TCGCAAAG | AGAGAGGT | TACCTACG | TGACTGCA | TGGACTAG | TCGAGCAT | AGTGCGAA | ACGGTTAG | AACTGCGT | TAGAGGTG | TGTTCAGG | TGGCTTGT | TCAGGGAA | AATCCGCT | ATCCCCTT | TCGGCATA
    ```
 ---
-5. ```
+ ```
    % ./word_design.py -n 83 -of examples/example5.cnf -s bin/cadical -q
    ```
    Output:
@@ -126,7 +129,7 @@ Options:
    CGATTTGC | TCAACGGA | CCATGGAT | ATCTTCGC | ATTAGGGC | ACTCTCAC | TACGTACG | CTCAGTGA | TCGCGATT | CGTTGAGA | GCTATCCA | AGAAAGGG | GTGGACTA | TATCCCTG | GGAGACAT | GAGCGTAA | GGGTATAG | AGCTTGCA | TGTGAGGA | CAGAACGT | GTGGCTAT | GATACGGT | GATGCAAG | GTCAAGTC | GCTCTTTG | AGCACTGT | GCCTACTT | CGACAAAG | GAAGCGTA | TGACACCA | AGTCAAGC | CGCCATTA | CCAAGCTA | ACCTAGAG | AGACCGAT | ATGCACCT | GTTTTGGG | GGGACAAA | GAATCACC | GACTGTGT | TCCAGTTG | CAAGATGG | ACGAGTAC | AGTGTTGG | TTCTGCAG | CACGTGTT | CCTCCAAA | GGTCCATT | CTGGTAAG | TGTCGTGT | TTTCCGAC | TAAGGCGT | GACACTCA | CGGTAACT | CGAGGTAA | GCGTTAGA | TCAGGAAC | CTCTCCTA | CCTGATCA | AAACCTGC | CCTGTAGT | ACGGATGT | AACAACCC | GGTCTGAA | CCTTTGTC | CTCCTACA | CACGACAA | GAGCTATC | GTAGAAGC | ATGGCAGA | ACTGGGTA | ATGATGCG | AGCTCAAC | CATAAGCG | GGAGTACA | TTGGTGGT | AGGGAATG | GTAAGGCA | CATCTTCC | AACCGAAG | AAGGTCCA | CTGATCTC | TCAGACTG
    ```
 ---
-6. ```
+ ```
    % ./word_design.py -n 71 -of examples/example6.cnf -q
    ```
    Output:
@@ -167,7 +170,7 @@ If you wish to play with the plotting, you may edit `experiments.py` and run
 ```
 % ./experiments.py
 ```
-from the root directory (don't forget to make `experiments.py` executable with `chmod +x`)
+from the root directory.
 
 ## Results
 <details>
