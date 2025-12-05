@@ -86,7 +86,7 @@ We encode a word with two bits per letter: `A=10, C=00, G=01, T=11`; this biject
 
 We encode a set of size $n$ with two/four sets of variables, depending on the value of `eliminate_permutations` the user passes to `DNAEncoder`: $Var(w, p, b)$ representing the $b$-th bit of the $p$-th position of word $w$ indexed from 0, $Match(w_1, w_2, p)$ representing wether words $w_1$ and $w_2$ have the same letter in position $p$ and, if `eliminate_permutations=True`, $PrevEq(w_1, w_2, p, b)$ representing whether words $w_1$ and $w_2$ are identical up to *and excluding* the $b$-th bit at $p$-th position, and $CurrEq(w_1, w_2, p, b)$ representing equality up to *and including* the current bit. We need $PrevEq,CurrEq$ to order every pair of words (by MSB), effectively eliminating permuations. 
 
-The last two were made in an optimization attempt via search space reduction, but in practice it ended up slowing down certain solvers, because they had to seed out sets that were technically correct until they were to find an ordered one. That is why I added the --order option instead of hardwiring it into the encoder.
+The last two were made in an optimization attempt via search space reduction, but in practice it ended up slowing down certain solvers, because they had to seed out sets that were technically correct until they were to find an ordered one. That is why I added the `--order` option instead of hardwiring it into the encoder.
 
 We represent the problem constraints as a conjunction of the following clauses:
 - For every $C\subset [8]$ s.t. $|C|=5$:
