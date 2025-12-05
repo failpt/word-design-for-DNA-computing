@@ -1,10 +1,12 @@
 import itertools
 
 class DNAEncoder: 
-    def __init__(self, num_words, eliminate_permutations=False):
-        """ Encode a set of strings {A, C, D, T} as {10, 00, 01, 11} and construct a 
-        CNF formula which enforces problem 033 specific constraints on the set. """
-        self.num_words = num_words
+    def __init__(self, size, eliminate_permutations=False):
+        """ Encode a set of 8-letter strings {A, C, G, T} of size ``size`` as 
+        {10, 00, 01, 11} and construct a CNF formula which enforces problem 033 specific 
+        constraints on the set. 
+        If you want your set to be ordered, set ``eliminate_permutations`` to ``False`` """
+        self.size = size
         self.eliminate_permutations = eliminate_permutations
         self.length = 8 # word length
         self.bpl = 2 # bits per letter
@@ -12,7 +14,7 @@ class DNAEncoder:
         self.code = { (True, False): 'A', (False, False): 'C', 
                      (False, True): 'G', (True, True): 'T' }
         
-        self.base_vars = self.num_words * self.length * self.bpl
+        self.base_vars = self.size * self.length * self.bpl
         self.total_vars = self.base_vars
         self.clauses = []
         
@@ -34,7 +36,7 @@ class DNAEncoder:
         :rtype: list of str """
         words = []
         head_var = 1
-        for w in range(self.num_words):
+        for w in range(self.size):
             chars = []
             for p in range(self.length):
                 bit0 = model[head_var - 1] > 0
@@ -88,7 +90,6 @@ class DNAEncoder:
             
             for b0 in [True, False]:
                 for b1 in [True, False]:
-                    # in this encoding we only need to flip the second bit for the complement
                     lits = [
                         -u0 if b0 else u0,
                         -u1 if (b1 ^ is_rc) else u1, 
@@ -102,7 +103,7 @@ class DNAEncoder:
             self.clauses.append([-x for x in combo])
             
     def _add_order(self, w1, w2):
-        """ Add clauses corresponding to order ``w1`` < ``w2`` by MSB. """
+        """ Add clauses corresponding to order ``w1`` > ``w2`` by MSB. """
         head_u, head_v = self._get_var(w1), self._get_var(w2)
         prev_eq = None 
         
@@ -110,7 +111,6 @@ class DNAEncoder:
             for b in range(self.bpl):
                 u, v = head_u + b, head_v + b
                 
-                # variable to represent equality of the currecntly compared bit
                 curr_eq = self._allocate_var()
                 
                 if prev_eq:
@@ -124,9 +124,9 @@ class DNAEncoder:
                 self.clauses.append([-curr_eq, u, -v])
                 
                 clause = [-u, v]
-                if prev_eq:                 # !(-u and v) => !prev_eq
-                    clause.append(-prev_eq)
-                self.clauses.append(clause)
+                if prev_eq:                 # (u and !v) => !prev_eq
+                    clause.append(-prev_eq) # = !(!u or v) => !prev_eq
+                self.clauses.append(clause) # = !u or v or !prev_eq
                 
                 prev_eq = curr_eq
                 
@@ -137,15 +137,15 @@ class DNAEncoder:
 
     def _encode(self):
         """ Enforce all the constraints on the words and save the clauses for CNF in a list. """
-        for w in range(self.num_words):
+        for w in range(self.size):
             self._add_gc_content_constraint(w)    
                      
-        for i in range(self.num_words):
-            for j in range(i, self.num_words):
+        for i in range(self.size):
+            for j in range(i, self.size):
                 if (i != j):
                     self._add_hamming_constraint(i, j, is_rc=False)
                 self._add_hamming_constraint(i, j, is_rc=True)
             
         if (self.eliminate_permutations):
-            for i in range(self.num_words - 1):
+            for i in range(self.size - 1):
                 self._add_order(i, i + 1)
