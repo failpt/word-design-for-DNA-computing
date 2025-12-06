@@ -114,7 +114,7 @@ def run_single(sizes, solver, json_out, plot_out):
     plot_data(json_out, plot_out, ["Ordered", "Not ordered"], solver, "single")
     
 def run_race(is_order):
-    """ Runs two batches of sizes and solvers. """
+    """ Run two batches of sizes and solvers. """
     run_batch(
         SIZES_ALL, 
         ["Glucose", "Kissat", "CaDiCaL"],
