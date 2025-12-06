@@ -5,7 +5,7 @@ class DNAEncoder:
         """ Encode a set of 8-letter strings {A, C, G, T} of size ``size`` as 
         {10, 00, 01, 11} and construct a CNF formula which enforces problem 033 specific 
         constraints on the set. 
-        If you want your set to be ordered, set ``eliminate_permutations`` to ``False`` """
+        If you want your set to be ordered, set ``eliminate_permutations`` to ``True`` """
         self.size = size
         self.eliminate_permutations = eliminate_permutations
         self.length = 8 # word length
@@ -103,7 +103,7 @@ class DNAEncoder:
             self.clauses.append([-x for x in combo])
             
     def _add_order(self, w1, w2):
-        """ Add clauses corresponding to order ``w1`` > ``w2`` by MSB. """
+        """ Add clauses corresponding to order ``w1`` < ``w2`` by MSB. """
         head_u, head_v = self._get_var(w1), self._get_var(w2)
         prev_eq = None 
         
@@ -133,7 +133,7 @@ class DNAEncoder:
             head_u += self.bpl
             head_v += self.bpl
             
-        self.clauses.append([-prev_eq])     # w1 != w2
+        self.clauses.append([-prev_eq])
 
     def _encode(self):
         """ Enforce all the constraints on the words and save the clauses for CNF in a list. """
